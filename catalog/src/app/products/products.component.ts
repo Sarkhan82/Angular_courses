@@ -13,9 +13,13 @@ import { FormBuilder } from '@angular/forms';
 export class ProductsComponent  {
   // on a déclarer Product en tant que modèle pour avoir un constructeur propre et ne pas faire n'importe quoi (typer)
   products! : Array<Product>;
+  currentPage: number=0;
+  pageSize: number =5;
+  totalPages : number=0;
   errorMessage! : string;
   // je déclare un objet de type searchFormGroup
   searchFormGroup! : FormGroup;
+  currentAction : string="all";
 
   // injection de dépendances pour récuperer notre service
   // Il faut rajouter au constructeur le formbuilde pour les formulaire
@@ -28,7 +32,7 @@ export class ProductsComponent  {
       keyword : this.fb.control(null) // on va ensuite aller dans le compoponent ajouter dans la balise HTML un attribut formControlName pour les connecter
     });
 
-    this.handleGetAllProducts();
+    this.handleGetPageProducts();
 
     
 }
@@ -45,6 +49,21 @@ export class ProductsComponent  {
       }
     });
  }
+
+ handleGetPageProducts() {
+  // le subscribe permet de définir l'observable
+  this.productService.getPageProducts(this.currentPage, this.pageSize).subscribe({
+    // on récupère une 
+    next : (data) => {
+      this.products=data.products;
+      this.totalPages=data.totalPages;
+    }, 
+    // en cas d'erreur
+    error : (err) => {
+      this.errorMessage=err;
+    }
+  });
+}
 
  handleDeleteProduct(p: Product) {
   let conf = confirm("Are you sure ?");
@@ -74,11 +93,24 @@ export class ProductsComponent  {
  }
 
  handleSearchProducts() {
+  this.currentAction="search";
+  this.currentPage=0;
   let keyword = this.searchFormGroup.value.keyword;
-  this.productService.searchProducts(keyword).subscribe({
+  this.productService.searchProducts(keyword, this.currentPage, this.pageSize).subscribe({
     next : (data) => {
-      this.products=data;
+      this.products=data.products;
+      this.totalPages=data.totalPages;
     }
   })
+ }
+
+ goToPage(i : number) {
+  this.currentPage = i;
+  this.handleGetPageProducts();
+  if(this.currentAction==="all") {
+    this.handleGetPageProducts();
+  } else {
+    this.handleSearchProducts();
+  }
  }
 }

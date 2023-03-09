@@ -31,12 +31,16 @@ export class ProductService {
     else return of(this.products);
   }
 
-  // à finir 2h21 de la vidéo
- /* public getPageProducts(page : number, size : number) : Observable<PageProduct> {
-    let rnd = Math.random();
-    if(rnd<0.1) return throwError(() => Error("Internet connexion error"));
-    else return of(this.products);
-  } */
+  // va nous permettre de récupérer les bons éléments sur les bonnes page
+  public getPageProducts(page : number, size : number) : Observable<PageProduct> {
+    let index = page*size;
+    let totalPages = ~~(this.products.length/size);
+    if(this.products.length % size != 0)
+    totalPages++;
+    // découpe les élements de la page pour les afficher
+    let pageProducts = this.products.slice(index,index+size);
+    return of({page:page, size:size, totalPages: totalPages, products: pageProducts});    
+  } 
 
   public deleteProduct(id : string) : Observable<boolean> {
     this.products = this.products.filter(p => p.id != id);
@@ -51,8 +55,13 @@ export class ProductService {
     } else return throwError( () => new Error("Product not found"));
   }
 
-  public searchProducts(keyword : string) : Observable<Product[]> {
-    let products = this.products.filter( p => p.name.includes(keyword));
-    return of(products);
+  public searchProducts(keyword : string, page : number, size : number) : Observable<PageProduct> {
+    let result = this.products.filter( p => p.name.includes(keyword));
+    let index = page*size;
+    let totalPages = ~~(result.length/size);
+    if(this.products.length % size != 0)
+    totalPages++;
+    let pageProducts = this.products.slice(index,index+size);
+    return of({page:page, size:size, totalPages: totalPages, products: pageProducts});  
   }
 }
