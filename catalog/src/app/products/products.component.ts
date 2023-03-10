@@ -4,6 +4,7 @@ import { ProductService } from '../services/product.service';
 // attention penser à faire les imports qui ne se font pas automatiquement
 import { FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-products',
@@ -23,7 +24,7 @@ export class ProductsComponent  {
 
   // injection de dépendances pour récuperer notre service
   // Il faut rajouter au constructeur le formbuilde pour les formulaire
-  constructor(private productService : ProductService, private fb : FormBuilder) {}
+  constructor(private productService : ProductService, private fb : FormBuilder, public authService : AuthenticationService) {}
 
   // rajouter pour lancer les fonctions au démaragge
   ngOnInit(): void {
@@ -113,4 +114,10 @@ export class ProductsComponent  {
     this.handleSearchProducts();
   }
  }
+
+ handleNewProduct() {
+  
+ }
 }
+
+
