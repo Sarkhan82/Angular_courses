@@ -5,6 +5,7 @@ import { ProductService } from '../services/product.service';
 import { FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -24,7 +25,7 @@ export class ProductsComponent  {
 
   // injection de dépendances pour récuperer notre service
   // Il faut rajouter au constructeur le formbuilde pour les formulaire
-  constructor(private productService : ProductService, private fb : FormBuilder, public authService : AuthenticationService) {}
+  constructor(private productService : ProductService, private fb : FormBuilder, public authService : AuthenticationService, private router : Router) {}
 
   // rajouter pour lancer les fonctions au démaragge
   ngOnInit(): void {
@@ -116,8 +117,9 @@ export class ProductsComponent  {
  }
 
  handleNewProduct() {
-  
+  this.router.navigateByUrl("/admin/new-product")
  }
 }
 
+// ARRET A 39:49 de la vidéo
 
