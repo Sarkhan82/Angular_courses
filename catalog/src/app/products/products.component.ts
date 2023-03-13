@@ -119,7 +119,10 @@ export class ProductsComponent  {
  handleNewProduct() {
   this.router.navigateByUrl("/admin/new-product")
  }
-}
 
-// ARRET A 39:49 de la vidéo
+ handleEditProduct(p : Product) {
+  this.router.navigateByUrl("/admin/edit-product/"+p.id)
+ }
+ }
+
 

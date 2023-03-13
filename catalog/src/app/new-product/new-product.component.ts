@@ -10,7 +10,7 @@ import { ProductService } from '../services/product.service';
 export class NewProductComponent {
   productFormGroup! : FormGroup;
 
-  constructor(private fb : FormBuilder, private prodService : ProductService) {}
+  constructor(private fb : FormBuilder, public prodService : ProductService) {}
 
   ngOnInit(): void {
     this.productFormGroup = this.fb.group( {
@@ -34,14 +34,5 @@ export class NewProductComponent {
 
   }
 
-  getErrorMessage(field: string, error : ValidationErrors) {
-    if(error['required']) {
-      return field + " is required";
-    } else if(error['minlength']) {
-      return field + " should have at least " + error['minlength']["requiredLength"] + " characters";
-    } else if(error['min']) {
-        return field + " should have a min value of " + error['min']["min"];
-    } else return "";
-  }
 
 }
